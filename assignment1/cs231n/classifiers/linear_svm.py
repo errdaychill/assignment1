@@ -85,8 +85,8 @@ def svm_loss_vectorized(W, X, y, reg):
     N, D = X.shape
 
     scores = X.dot(W)
-    true_label = scores[np.arange(N), y]
-    margin = scores - true_label.reshape(-1,1) + 1
+    true_scores = scores[np.arange(N), y]
+    margin = scores - true_scores.reshape(-1,1) + 1
     margin[np.arange(N), y] = 0
 
     input_sum = np.sum(X, axis=0)
