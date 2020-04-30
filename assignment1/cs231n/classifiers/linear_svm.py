@@ -37,7 +37,7 @@ def svm_loss_naive(W, X, y, reg):
             if margin > 0:
                 loss += margin
                 dW[:,j] += X[i] # matrix[:,k].shape = 1D
-                dW[:,y[i]] -= X[i] # Why do I have to subtract
+                dW[:,y[i]] -= X[i]
 
     # Right now the loss is a sum over all training examples, but we want it
     # to be an average instead so we divide by num_train.
@@ -91,7 +91,7 @@ def svm_loss_vectorized(W, X, y, reg):
     loss_count = (margin_compare > 0)
     total_count = np.sum(loss_count, axis=1)
     loss_count = np.array(loss_count, dtype=int)
-    loss_count[np.arange(N), y] -= total_count #WHy do i have to subtract
+    loss_count[np.arange(N), y] -= total_count 
     loss = np.sum(margin_compare * loss_count, axis=1).sum()
     dW = X.T.dot(loss_count)
     
