@@ -57,7 +57,6 @@ class LinearClassifier(object):
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
             chosen_indexes2 = np.random.choice(X.shape[0], batch_size, replace=True)
-            print(chosen_indexes == chosen_indexes2)
             X_batch = X[chosen_indexes2]
             y_batch = y[chosen_indexes2]
             pass
