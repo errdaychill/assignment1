@@ -43,7 +43,7 @@ def softmax_loss_naive(W, X, y, reg):
     dW += 2*reg*W
 
     
-    
+    aaaaaa
     pass
     
     
