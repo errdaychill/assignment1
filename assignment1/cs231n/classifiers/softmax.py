@@ -76,7 +76,7 @@ def softmax_loss_vectorized(W, X, y, reg):
     softmax = np.exp(scores) / np.exp(scores).sum(axis=1).reshape(-1,1)
     true_classes = softmax[np.arange(X.shape[0]), y]    
 
-    dW
+    dWdddddddd
 
 
 
