@@ -79,8 +79,9 @@ class TwoLayerNet(object):
         # shape (N, C).                                                             #
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        first_hidden = X.dot(W1) + b1.reshape(-1,1)
-        scores = first_hidden.dot(W2) + b2.reshape(-1,1)
+        affine = X.dot(W1) + b1.reshape(1, -1)
+        first_hidden = np.maximum(0, affine)
+        scores  = first_hidden.dot(W2) + b2.reshape(1,-1)
         pass
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
@@ -98,10 +99,13 @@ class TwoLayerNet(object):
         # classifier loss.                                                          #
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        scores -= np.amax(scores, axis=1)
-        softmax = np.exp(scores)/np.exp(scores).sum(axis=1)
-        loss -= np.log(softmax[np.arange(N), y]).sum()
+        scores -= np.amax(scores, axis=1).reshape(-1,1)
+        softmax = np.exp(scores)/np.exp(scores).sum(axis=1).reshape(-1,1)
+        true_scores = softmax[np.arange(N), y]
+        loss = 0.0
+        loss -= np.sum(np.log(true_scores))
         loss /= N
+        loss += reg*(np.sum(W1*W1) + np.sum(W2*W2))
         
         pass
 
@@ -115,11 +119,15 @@ class TwoLayerNet(object):
         # grads['W1'] should store the gradient on W1, and be a matrix of same size #
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        softmax_derivative = softmax[np.arange(N), y] - 1
-        grads['W2'] = first_hidden.T.dot(softmax_derivative)
-        grads['b2'] = softmax_derivative.sum(axis=0)
-        grads['W1'] = 
-        grads['b1'] = 
+        softmax[np.arange(N), y] -= 1
+        # 왜 num_train으로 나눠줘야하지??
+        softmax /= N
+        grads['W2'] = first_hidden.T.dot(softmax) + 2*reg*W2
+        grads['b2'] = softmax.sum(axis=0)
+        dout = softmax.dot(W2.T) # dL/dh1 
+        upstream = (affine>0) * dout # N by H 
+        grads['W1'] = X.T.dot(upstream) + 2*reg*W1
+        grads['b1'] = np.sum(upstream, axis=0)
         pass
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****

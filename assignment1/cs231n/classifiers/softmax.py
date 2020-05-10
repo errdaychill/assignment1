@@ -81,7 +81,7 @@ def softmax_loss_vectorized(W, X, y, reg):
     true_classes = softmax[np.arange(X.shape[0]), y]   
     softmax[np.arange(X.shape[0]), y] -= 1 
     dW = X.T.dot(softmax)
-
+    
     loss = -np.log(true_classes).sum() 
     loss /= X.shape[0]
     loss += reg*np.sum(W*W)
