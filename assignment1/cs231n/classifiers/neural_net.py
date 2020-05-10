@@ -79,7 +79,8 @@ class TwoLayerNet(object):
         # shape (N, C).                                                             #
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
+        first_hidden = X.dot(W1) + b1.reshape(-1,1)
+        scores = first_hidden.dot(W2) + b2.reshape(-1,1)
         pass
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
@@ -97,7 +98,11 @@ class TwoLayerNet(object):
         # classifier loss.                                                          #
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
+        scores -= np.amax(scores, axis=1)
+        softmax = np.exp(scores)/np.exp(scores).sum(axis=1)
+        loss -= np.log(softmax[np.arange(N), y]).sum()
+        loss /= N
+        
         pass
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
@@ -110,7 +115,11 @@ class TwoLayerNet(object):
         # grads['W1'] should store the gradient on W1, and be a matrix of same size #
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
+        softmax_derivative = softmax[np.arange(N), y] - 1
+        grads['W2'] = first_hidden.T.dot(softmax_derivative)
+        grads['b2'] = softmax_derivative.sum(axis=0)
+        grads['W1'] = 
+        grads['b1'] = 
         pass
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
