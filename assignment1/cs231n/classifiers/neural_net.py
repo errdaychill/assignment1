@@ -128,6 +128,7 @@ class TwoLayerNet(object):
         upstream = (affine>0) * dout # N by H 
         grads['W1'] = X.T.dot(upstream) + 2*reg*W1
         grads['b1'] = np.sum(upstream, axis=0)
+        asdasfdd
         pass
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
